@@ -1,0 +1,49 @@
+{% extends "layouts/default.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'stylesheets/item_index.css' %}">
+{% endblock %}
+ 
+{% block content %}
+    {% include 'includes/logged_in_header.html' %}
+    <h1>{{ title }}</h1>
+    <a href="{% url 'items:create' %}">出品する</a>
+    <main class="container">
+        <div class="row">
+            {% for item in item_list %}
+                <div class="col-4 item">
+                    <div class="card h-100">
+                        <a href="{% url 'items:detail' item.id %}">
+                            {% if item.image %}
+                                <img class="item_image card-img-top" src="{{ item.image.url }}">
+                            {% else %}
+                                <img class="item_image card-img-top" src="{% static 'images/no_image.png' %}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                    {{ item.name }}
+                            </h2>
+                            <div class="card-text">
+                                (出品者: {{ item.user.username }})
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            {% if item.orders.all %}</a>
+                                <div class="sold_out text-center">売り切れ</div>
+                            {% else %}
+                                {{ item.price }}円
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>商品はありません。</p>
+            {% endfor %}
+        </div>
+    </main>
+    
+
+{% endblock %}

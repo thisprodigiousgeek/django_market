@@ -1,0 +1,45 @@
+{% extends "layouts/default.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'stylesheets/item_detail.css' %}">
+{% endblock %}
+ 
+{% block content %}
+    {% include 'includes/logged_in_header.html' %}
+    <main class="container">
+        <h1>{{ title }}</h1>
+        <dl>
+            <dt>商品名</dt>
+            <dd>{{ item.name }}</dd>
+            <dt>説明</dt>
+            <dd>{{ item.description }}</dd>
+            <dt>価格</dt>
+            <dd>{{ item.price }}円</dd>
+            <dt>投稿者名</dt>
+            <dd>{{ item.user.username }}</dd>
+            <dt>投稿日時</dt>
+            <dd>{{ item.created_at }}</dd>
+            <dt>更新日時</dt>
+            <dd>{{ item.updated_at }}</dd>
+        </dl>
+        {% if item.image %}
+            <p><img src="{{ item.image.url }}"></p>
+        {% else %}
+            <p>
+                <img class="item_image" src="{% static 'images/no_image.png' %}">
+            </p>
+        {% endif %}
+        
+        <!-- いいね -->
+        {% if item.orders.all %}</a>
+            <div class="sold_out">売り切れ</div>
+        {% else %}
+            <form method="post" class="order" action="{% url 'items:order' item.id %}">
+                {% csrf_token %}
+                <button type="submit">購入する</button>
+            </form>
+        {% endif %}
+    </main>
+{% endblock %}

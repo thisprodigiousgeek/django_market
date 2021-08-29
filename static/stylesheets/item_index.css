@@ -1,0 +1,8 @@
+.item {
+    margin-bottom: 20px;
+}
+.sold_out {
+    border: solid 1px red;
+    color: red;
+    font-weight: bold;
+}
